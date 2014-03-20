@@ -1,8 +1,6 @@
 package geekhub.grails
 
-import org.springframework.security.access.annotation.Secured
-
-import java.text.DateFormat
+import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(['ROLE_ADMIN'])
 class PushNotificationController {
@@ -45,6 +43,101 @@ class PushNotificationController {
         String version = Setting.findByName("release_version")?.value?:0
 
         render view: 'release', model: [date: date, version: version]
+    }
+
+    def notificationFlow = {
+        enter  {
+            action {
+                Notification notification = new Notification()
+                flow.notification = notification
+                [notification: flow.notification]
+            }
+
+            on("success").to("title")
+            on(Exception).to("error")
+        }
+        title {
+            on('next') { BuildTitleCommand command ->
+                if (command.hasErrors()) {
+                    flash.message = "Validation error"
+                    flow.command = command
+                    return error()
+                }
+                bindData(flow.notification, command)
+                [contact: flow.notification]
+            }.to('description')
+            on('cancel').to('finish')
+        }
+        description {
+            on('next') { BuildDescriptionCommand command ->
+                if (command.hasErrors()) {
+                    flash.message = "Validation error"
+                    flow.command = command
+                    return error()
+                }
+                bindData(flow.notification, command)
+                [contact: flow.notification]
+            }.to('postTime')
+            on('previous').to('title')
+            on('cancel').to('finish')
+        }
+        postTime {
+            on('next') { BuildPostTimeCommand command ->
+                if (command.hasErrors()) {
+                    flash.message = "Validation error"
+                    flow.command = command
+                    return error()
+                }
+                bindData(flow.notification, command)
+                [contact: flow.notification]
+            }.to('complete')
+            on('previous').to('description')
+            on('cancel').to('finish')
+        }
+        complete {
+            on('next') {
+                if (!flow.notification.save()) {
+                    flash.message = "Couldn't save the contact"
+                    return error()
+                }
+            }.to('finish')
+            on('previous').to('postTime')
+            on('cancel').to('finish')
+            on(Exception).to('error')
+        }
+        error {
+            on('confirm').to('finish')
+        }
+        finish {
+            redirect(controller: 'device', action: 'list')
+        }
+    }
+
+}
+
+class BuildTitleCommand implements Serializable {
+    String title
+
+    static constraints = {
+        title(blank:false, nullable:false, maxSize: 50)
+    }
+
+}
+
+class BuildDescriptionCommand implements Serializable {
+    String description
+
+    static constraints = {
+        description(blank:false, nullable:false, maxSize: 250)
+    }
+
+}
+
+class BuildPostTimeCommand implements Serializable {
+    Date postTime
+
+    static constraints = {
+        postTime(blank:false, nullable:false)
     }
 
 }
