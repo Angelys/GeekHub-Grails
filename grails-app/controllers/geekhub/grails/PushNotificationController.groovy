@@ -45,11 +45,12 @@ class PushNotificationController {
         render view: 'release', model: [date: date, version: version]
     }
 
-    def notificationFlow = {
+    def notificationBuildFlow = {
         enter  {
             action {
                 Notification notification = new Notification()
                 flow.notification = notification
+
                 [notification: flow.notification]
             }
 

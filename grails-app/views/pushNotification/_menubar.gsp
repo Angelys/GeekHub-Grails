@@ -6,5 +6,8 @@
         <li>
             <g:link controller="pushNotification" action="release">New release date</g:link>
         </li>
+        <li>
+            <g:link controller="pushNotification" action="notificationBuild" event="title">Build notification</g:link>
+        </li>
     </ul>
 </div>
