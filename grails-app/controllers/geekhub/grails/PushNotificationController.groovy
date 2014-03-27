@@ -45,6 +45,11 @@ class PushNotificationController {
         render view: 'release', model: [date: date, version: version]
     }
 
+    def list() {
+
+        render view: 'list', model: [notifications: Notification.getAll()]
+    }
+
     def notificationBuildFlow = {
         enter  {
             action {
@@ -65,7 +70,7 @@ class PushNotificationController {
                     return error()
                 }
                 bindData(flow.notification, command)
-                [contact: flow.notification]
+                [notification: flow.notification]
             }.to('description')
             on('cancel').to('finish')
         }
@@ -77,7 +82,7 @@ class PushNotificationController {
                     return error()
                 }
                 bindData(flow.notification, command)
-                [contact: flow.notification]
+                [notification: flow.notification]
             }.to('postTime')
             on('previous').to('title')
             on('cancel').to('finish')
@@ -87,10 +92,11 @@ class PushNotificationController {
                 if (command.hasErrors()) {
                     flash.message = "Validation error"
                     flow.command = command
+
                     return error()
                 }
                 bindData(flow.notification, command)
-                [contact: flow.notification]
+                [notification: flow.notification]
             }.to('complete')
             on('previous').to('description')
             on('cancel').to('finish')
@@ -104,13 +110,12 @@ class PushNotificationController {
             }.to('finish')
             on('previous').to('postTime')
             on('cancel').to('finish')
-            on(Exception).to('error')
         }
         error {
             on('confirm').to('finish')
         }
         finish {
-            redirect(controller: 'device', action: 'list')
+            redirect(controller: 'pushNotification', action: 'list')
         }
     }
 

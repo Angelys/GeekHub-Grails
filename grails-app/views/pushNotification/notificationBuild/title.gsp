@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <h1>Notification create: Step 2</h1>
+    <h1>Notification create: Step 1</h1>
 
     <g:hasErrors bean="${command}">
         <div class="errors">
@@ -15,10 +15,13 @@
     </g:hasErrors>
 
     <section>
-        <g:form action="notification" method="post">
+        <g:form action="notificationBuild" method="post">
             <label for="title">Title</label>
             <input type="text" id="title" name="title" value="${notification.title}"/>
-            <button>Save & Push</button>
+
+            <g:submitButton name="next" value="Next" />
+            <g:submitButton name="previous" value="Previous" />
+            <g:submitButton name="cancel" value="Cancel" />
         </g:form>
     </section>
 </body>
