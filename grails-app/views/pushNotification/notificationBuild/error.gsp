@@ -8,10 +8,18 @@
 <body>
     <h1>Error on web flow</h1>
 
-    <g:hasErrors bean="${command}">
-        <div class="errors">
-            <g:renderErrors bean="${command}" as="list" />
-        </div>
-    </g:hasErrors>
+    <g:if test="${message}">
+        <div class="message">${message}</div>
+    </g:if>
+    <g:form action="build">
+    <div class="dialog">
+        <p>Sorry, but the system has reported an unrecoverable error.</p>
+    </div>
+    <div class="buttons">
+        <span class="button">
+            <g:submitButton class="confirm" name="confirm" value="OK" />
+        </span>
+    </div>
+</g:form>
 </body>
 </html>

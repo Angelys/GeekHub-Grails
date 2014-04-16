@@ -1,6 +1,6 @@
 package geekhub.grails
 
-import org.springframework.security.access.annotation.Secured
+import grails.plugin.springsecurity.annotation.Secured
 
 class DeviceController {
 

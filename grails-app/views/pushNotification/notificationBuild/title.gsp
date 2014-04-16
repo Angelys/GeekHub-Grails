@@ -8,6 +8,9 @@
 <body>
     <h1>Notification create: Step 1</h1>
 
+    <g:if test="${message}">
+    <div class="message">${message}</div>
+    </g:if>
     <g:hasErrors bean="${command}">
         <div class="errors">
             <g:renderErrors bean="${command}" as="list" />
