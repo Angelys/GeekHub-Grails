@@ -65,7 +65,7 @@ class PushNotificationController {
         title {
             on('next') { BuildTitleCommand command ->
                 if (command.hasErrors()) {
-                    flash.message = "Validation error"
+                    flash.notificationMessage = "Validation error"
                     flow.command = command
                     return error()
                 }
@@ -77,7 +77,7 @@ class PushNotificationController {
         description {
             on('next') { BuildDescriptionCommand command ->
                 if (command.hasErrors()) {
-                    flash.message = "Validation error"
+                    flash.notificationMessage = "Validation error"
                     flow.command = command
                     return error()
                 }
@@ -90,7 +90,7 @@ class PushNotificationController {
         postTime {
             on('next') { BuildPostTimeCommand command ->
                 if (command.hasErrors()) {
-                    flash.message = "Validation error"
+                    flash.notificationMessage = "Validation error"
                     flow.command = command
 
                     return error()
@@ -104,7 +104,7 @@ class PushNotificationController {
         complete {
             on('next') {
                 if (!flow.notification.save()) {
-                    flash.message = "Couldn't save the contact"
+                    flash.notificationMessage = "Couldn't save the contact"
                     return error()
                 }
             }.to('finish')

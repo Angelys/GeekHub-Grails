@@ -8,8 +8,8 @@
 <body>
     <h1>Error on web flow</h1>
 
-    <g:if test="${message}">
-        <div class="message">${message}</div>
+    <g:if test="${notificationMessage}">
+        <div class="message">${notificationMessage}</div>
     </g:if>
     <g:form action="build">
     <div class="dialog">
